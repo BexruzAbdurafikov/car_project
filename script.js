@@ -67,6 +67,11 @@ tempBtns.forEach((btn) => {
             basic.powerReserve += 5;
         }
         reload();
+        if (basic.speed === 0) {
+            disk_images.forEach((img) => {
+                img.style.animationDuration = `0ms`
+            })
+        }
     });
 });
 
@@ -90,26 +95,34 @@ diskBtns.forEach((btn) => {
             })
         }
         reload();
+        if (basic.speed === 0) {
+            disk_images.forEach((img) => {
+                img.style.animationDuration = `0ms`
+            })
+        }
     });
 });
 const airCond = document.querySelector('.switch input');
 let interval = 0;
 
 airCond.addEventListener('click', () => {
+    clearInterval(interval);
     if (airCond.checked) {
-        clearInterval(interval);
-
+        let timer = 0
         interval = setInterval(() => {
-            if (basic.powerReserve > 740) {
+            if (timer < 10) {
                 basic.powerReserve -= 1;
+                timer++
                 reload();
             }
         }, 1000);
     } else {
         clearInterval(interval);
+        let timer = 0
         interval = setInterval(() => {
-            if (basic.powerReserve < 750) {
-                basic.powerReserve += 1; 
+            if (timer < 10) {
+                basic.powerReserve += 1;
+                timer++
                 reload();
             }
         }, 1000);
