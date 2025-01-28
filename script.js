@@ -1,107 +1,119 @@
-const speeed = document.querySelector(`#speeed`)
-const h2 = document.querySelector(`h2`)
-const increaseSpeed = document.querySelector(`#increaseSpeed`)
-const decreaseSpeed = document.querySelector(`#decreaseSpeed`)
-const increaseTemp = document.querySelector(`#increaseTemp`)
-const decreaseTemp = document.querySelector(`#decreaseTemp`)
-const increaseDiskSize = document.querySelector(`#increaseDiskSize`)
-const decreaseDiskSize = document.querySelector(`#decreaseDiskSize`)
-const temp = document.querySelector(`#temp`)
-const disk_images = document.querySelectorAll(".disks img");
-const price = document.querySelector(`#price`)
-const disk_size = document.querySelector(`#diskSize`)
+const basic = {
+    powerReserve: 750,
+    price: 89990,
+    speed: 60,
+    temp: 20,
+    disks: 19,
+    duration: 1000
+};
 
-let current_speed = 60;
-let current_km = 750;
-let current_temp = 20
-let current_disk_size = 113
-let current_price = 89990
 
-const update_speed = () => {
-    const disk_speed = current_speed > 0 ? 300 / current_speed : 0;
+const power = document.querySelector('#power');
+const price = document.querySelector('#price');
+const speed = document.querySelector('#speed');
+const temp = document.querySelector('#temp');
+const disks = document.querySelector('#diskSize');
+
+
+const speedBtns = document.querySelectorAll('.speed__btn');
+const tempBtns = document.querySelectorAll('.temp__btn');
+const diskBtns = document.querySelectorAll('.disks__btn');
+const disk_images = document.querySelectorAll(`.disks img`)
+
+function reload() {
+    power.innerHTML = `${basic.powerReserve} км`;
+    price.innerHTML = `${basic.price.toLocaleString()}`;
+    speed.innerHTML = `${basic.speed}`;
+    temp.innerHTML = `${basic.temp}`;
+    disks.innerHTML = `${basic.disks}`;
     disk_images.forEach((img) => {
-        img.style.animationDuration = `${disk_speed}s`;
+        img.style.animationDuration = `${basic.duration}ms`
     })
 }
+reload();
 
-increaseSpeed.onclick = () => {
-    current_speed = current_speed + 5;
-    if (speeed.innerHTML < 300) {
-        speeed.innerHTML = current_speed;
-    }
-    if (current_km > 0 && current_speed <= 300) {
-        current_km = current_km - 5;
-        h2.innerHTML = `${current_km} км`;
-    }else {
-        current_speed = 300
-        speeed.innerHTML = current_speed
-    }
-    update_speed()
-}
 
-decreaseSpeed.onclick = () => {
-    current_speed = current_speed - 5
-    if (speeed.innerHTML > 0) {
-        speeed.innerHTML = current_speed
-    }
-    if (current_km > 0 && current_speed >= 0) {
-        current_km = current_km + 5;
-        h2.innerHTML = `${current_km}км`;
-    } else {
-        current_speed = 0
-        speeed.innerHTML = current_speed
-    }
-    update_speed()
-}
-
-increaseTemp.onclick = () => {
-    if (current_temp < 40) {
-        current_temp = current_temp + 5;
-        temp.innerHTML = current_temp;
-
-        if (current_km > 0) {
-            current_km = current_km - 5;
-            h2.innerHTML = `${current_km} км`;
+speedBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+        const attr = btn.getAttribute('data-action');
+        if (attr === 'inc' && basic.speed < 300) {
+            basic.speed += 10;
+            basic.powerReserve -= 5;
+            basic.duration -= 30
         }
-    }
-};
-
-decreaseTemp.onclick = () => {
-    if (current_temp > -10) {
-        current_temp = current_temp - 5;
-        temp.innerHTML = current_temp;
-
-        if (current_km > 0) {
-            current_km = current_km + 5;
-            h2.innerHTML = `${current_km} км`;
+        if (attr === 'dec' && basic.speed > 0) {
+            basic.speed -= 10;
+            basic.powerReserve += 5;
+            basic.duration += 30
         }
-    }
-};
-
-
-const update_size = () => {
-    disk_images.forEach((img) => {
-        img.style.width = `${current_disk_size}px`;
-        img.style.height = `${(current_disk_size * 0.8)}px`;
+        reload();
+        if (basic.speed === 0) {
+            disk_images.forEach((img) => {
+                img.style.animationDuration = `0ms`
+            })
+        }
     });
-};
+});
 
-increaseDiskSize.onclick = () => {
-    if (current_disk_size < 120) {
-        current_disk_size = current_disk_size + 2;
+tempBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+        const attr = btn.getAttribute('data-action');
+        if (attr === 'inc' && basic.temp < 40) {
+            basic.temp += 5;
+            basic.powerReserve -= 5;
+        }
+        if (attr === 'dec' && basic.temp > -10) {
+            basic.temp -= 5;
+            basic.powerReserve += 5;
+        }
+        reload();
+    });
+});
 
-        current_price = current_price + 200
-        price.innerHTML = current_price
-        update_size();
+diskBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+        const attr = btn.getAttribute('data-action');
+        if (attr === 'inc' && basic.disks < 21) {
+            basic.disks += 1;
+            basic.price += 500
+            disk_images.forEach((img) => {
+                img.style.width = `${img.width + 5}px`
+                img.style.height = `${img.height + 5}px`
+            })
+        }
+        if (attr === 'dec' && basic.disks > 18) {
+            basic.disks -= 1;
+            basic.price -= 500
+            disk_images.forEach((img) => {
+                img.style.width = `${img.width - 5}px`
+                img.style.height = `${img.height - 5}px`
+            })
+        }
+        reload();
+    });
+});
+const airCond = document.querySelector('.switch input');
+let interval = 0;
+
+airCond.addEventListener('click', () => {
+    if (airCond.checked) {
+        clearInterval(interval);
+
+        interval = setInterval(() => {
+            if (basic.powerReserve > 740) {
+                basic.powerReserve -= 1;
+                reload();
+            }
+        }, 1000);
+    } else {
+        clearInterval(interval);
+        interval = setInterval(() => {
+            if (basic.powerReserve < 750) {
+                basic.powerReserve += 1; 
+                reload();
+            }
+        }, 1000);
     }
-};
+});
 
-decreaseDiskSize.onclick = () => {
-    if (current_disk_size > 107) { 
-        current_disk_size = current_disk_size - 2;
-
-        current_price = current_price - 200
-        price.innerHTML = current_price
-        update_size();
-    }
-};
+reload();

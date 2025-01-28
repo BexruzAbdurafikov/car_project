@@ -24,7 +24,7 @@
             <div class="about_car">
                 <div>
                     <h3>Запас хода</h3>
-                    <h2>750км</h2>
+                    <h2 id="power">750км</h2>
                 </div>
                 <div>
                     <h3>Цена</h3>
@@ -39,16 +39,16 @@
                     <span class="title">Скорость автомобиля</span>
                     <div>
                         <div class="param">
-                            <span id="speeed">60 </span>
+                            <span id="speed">60 </span>
                             км/ч
                         </div>
                     </div>
                 </div>
                 <div class="btns">
-                    <button id="increaseSpeed">
+                    <button class="speed__btn" data-action="inc">
                         <img src="./img/image 3.png" alt="arrow-up">
                     </button>
-                    <button id="decreaseSpeed">
+                    <button class="speed__btn" data-action="dec">
                         <img src="./img/image 4.png" alt="arrow-down">
                     </button>
                 </div>
@@ -63,10 +63,10 @@
                     </div>
                 </div>
                 <div class="btns">
-                    <button id="increaseTemp">
+                    <button class="temp__btn" data-action="inc">
                         <img src="./img/image 3.png" alt="arrow-up">
                     </button>
-                    <button id="decreaseTemp">
+                    <button class="temp__btn" data-action="dec">
                         <img src="./img/image 4.png" alt="arrow-down">
                     </button>
                 </div>
@@ -82,10 +82,10 @@
                     </div>
                 </div>
                 <div class="btns">
-                    <button id="increaseDiskSize">
+                    <button class="disks__btn" data-action="inc">
                         <img src="./img/image 3.png" alt="arrow-up">
                     </button>
-                    <button id="decreaseDiskSize">
+                    <button class="disks__btn" data-action="dec">
                         <img src="./img/image 4.png" alt="arrow-down">
                     </button>
                 </div>
